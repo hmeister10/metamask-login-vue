@@ -86,8 +86,9 @@ export default {
   created() {
     this.getUser();
     window.setTimeout(async () => {
-      if(this.checkSaved()) this.saved = true
-      
+      if(this.checkSaved()) {
+        this.saved = true
+      }
       this.waiting = false;
     }, 2000);
     
@@ -107,13 +108,17 @@ export default {
     checkSaved() {
       const account = getAccount();
       const user = JSON.parse(localStorage.getItem("user"));
-      const userMatches = this.user.name === user.name;
-      const accountExists = account != undefined;
-      const emailMatches = this.user.email === user.email;
-      if(userMatches && accountExists && emailMatches) {
-        this.$emit("setState", "REGISTERED");
+      if(user) {
+
+        const userMatches = this.user.name === user.name;
+        const accountExists = account != undefined;
+        const emailMatches = this.user.email === user.email;
+        if(userMatches && accountExists && emailMatches) {
+          this.$emit("setState", "REGISTERED");
+        }
+        return userMatches && accountExists && emailMatches;
       }
-      return userMatches && accountExists && emailMatches;
+      return false
     },
     getUser() {
       // if user in local storage
