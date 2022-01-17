@@ -1,37 +1,39 @@
 <template>
   <div>
-    <v-card class="mx-auto" :color="loggedIn ? '#089f38' : '#1976d2'" dark>
+    <v-card class="mx-auto" :color="(isLoggedIn) ? '#089f38' : '#1976d2'" dark>
       <v-card-title>
         <v-icon large left> mdi-link </v-icon>
         <span class="text-h6 font-weight-light">Login</span>
       </v-card-title>
       <v-card-subtitle>
         <span class="text-h6 font-weight-light">
-          {{subtitle}}
+          {{ subtitle }}
         </span>
       </v-card-subtitle>
 
-      <v-card-text class="text-h5 font-weight-bold">
-        
-      </v-card-text>
+      <v-card-text class="text-h5 font-weight-bold"> </v-card-text>
 
       <v-card-actions>
         <!-- login button -->
-        <v-btn elevation="2" large class="mb-3" @click="handleLogin" :loading="waiting">
+        <v-btn
+          elevation="2"
+          large
+          class="mb-3"
+          @click="handleLogin"
+          :loading="waiting"
+        >
           Login
         </v-btn>
-        
       </v-card-actions>
     </v-card>
-
   </div>
 </template>
 
 <script>
-import { isLoggedIn, login } from '../web3'
+import { isLoggedIn, login } from "../web3";
 export default {
   name: "Login",
-   props: {
+  props: {
     state: {
       type: String,
     },
@@ -47,29 +49,32 @@ export default {
     window.setTimeout(async () => {
       if (this.isRegistered) {
         this.loggedIn = await isLoggedIn();
-        if(this.loggedIn) {
+        console.log(this.loggedIn);
+        if (this.loggedIn) {
           this.$emit("setState", "LOGGED_IN");
         }
       }
       this.waiting = false;
     }, 3000);
-    
   },
   computed: {
-  isRegistered() {
-    return this.state === "REGISTERED";
-  },
-   subtitle() {
-    if(this.waiting) {
-      return 'Checking login status...';
-    } else {
-     if (this.loggedIn) {
-       return 'You are logged in!';
-     } else {
-       return "Sign a random challenge with your wallet and let the system verify it";
-     }
-    }
-   }
+    isRegistered() {
+      return this.state === "REGISTERED";
+    },
+    isLoggedIn() {
+      return this.state === "LOGGED_IN";
+    },
+    subtitle() {
+      if (this.waiting) {
+        return "Checking login status...";
+      } else {
+        if (this.loggedIn) {
+          return "You are logged in!";
+        } else {
+          return "Sign a random challenge with your wallet and let the system verify it";
+        }
+      }
+    },
   },
   methods: {
     getUser() {
@@ -84,8 +89,8 @@ export default {
     },
     async handleLogin() {
       if (this.isRegistered) {
-        await login()
-        this.loggedIn = await isLoggedIn()
+        await login();
+        this.loggedIn = await isLoggedIn();
         this.$emit("setState", "LOGGED_IN");
       }
     },

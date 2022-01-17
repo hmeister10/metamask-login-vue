@@ -21,6 +21,7 @@
           color="tertiary"
           required
           class="mb-3"
+          name="name"
         ></v-text-field>
 
         <!-- email input field -->
@@ -31,6 +32,8 @@
           color="tertiary"
           required
           class="mb-3"
+          name="email"
+          type="email"
         ></v-text-field>
       </v-card-text>
 
@@ -88,6 +91,7 @@ export default {
     window.setTimeout(async () => {
       if(this.checkSaved()) {
         this.saved = true
+        this.$emit("setState", "REGISTERED");
       }
       this.waiting = false;
     }, 2000);
@@ -113,9 +117,6 @@ export default {
         const userMatches = this.user.name === user.name;
         const accountExists = account != undefined;
         const emailMatches = this.user.email === user.email;
-        if(userMatches && accountExists && emailMatches) {
-          this.$emit("setState", "REGISTERED");
-        }
         return userMatches && accountExists && emailMatches;
       }
       return false
