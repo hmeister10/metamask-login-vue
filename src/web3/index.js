@@ -1,6 +1,8 @@
 import Web3 from "web3";
-
-export let web3 = new Web3(window.web3.currentProvider);
+export let web3 = null;
+if(window.web3){
+  web3 = new Web3(window.web3.currentProvider);
+}
 export let account = null;
 export let isAuthenticated = false;
 export let state = "NOT_CONNECTED"
@@ -84,7 +86,11 @@ export const sign = async (message) => {
 }
 
 export const verifySignature = async (nonce, signature) => {
+  
+  // use the nonce and signature to recover the public address
   const signAddress = await web3.eth.accounts.recover(nonce, signature); 
+  
+  // compare the recovered address to the account address
   return account.toLowerCase() == signAddress.toLowerCase()
 }
 

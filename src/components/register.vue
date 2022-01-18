@@ -88,14 +88,19 @@ export default {
   },
   created() {
     this.getUser();
-    window.setTimeout(async () => {
-      if(this.checkSaved()) {
-        this.saved = true
-        this.$emit("setState", "REGISTERED");
+      // get autoConnect value from session storage
+      const autoConnect = sessionStorage.getItem("autoConnect");
+      if(autoConnect === "true") {
+        window.setTimeout(async () => {
+
+          if(this.checkSaved()) {
+            this.saved = true
+            this.$emit("setState", "REGISTERED");
+          }
+          this.waiting = false;
+        }, 2000);
+        
       }
-      this.waiting = false;
-    }, 2000);
-    
   },
   computed: {
     isConnected() {
